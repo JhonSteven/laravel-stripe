@@ -14,5 +14,20 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
+// Route::post();
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('users', function () {
+    if(Auth::check() && request()->ajax())
+    {
+        return response()->json(['users'=>\App\User::all()]);
+    }
+    return response()->json(['errors' => 'Hola mundo']);
+});
+Route::get('api/user', function () {
+    return Auth::user();
+})->middleware(['auth','auth.basic.once']);
